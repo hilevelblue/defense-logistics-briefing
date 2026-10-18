@@ -41,3 +41,13 @@ for f in "$OUT.png" "$OUT.pdf"; do
   [ -s "$f" ] || { echo "ERROR: $f not created"; exit 1; }
 done
 echo "OK $OUT.png $(stat -c%s "$OUT.png")B / $OUT.pdf $(stat -c%s "$OUT.pdf")B (browser: $CHROME)"
+
+# 메일 첨부용 썸네일(640px JPEG). base64를 25,000자 조각으로 나눠 /tmp/thumb_part_* 에 저장
+rm -f /tmp/thumb_part_*
+if convert "$OUT.png" -resize 640x -strip -quality 50 -sampling-factor 4:2:0 "$OUT-thumb.jpg" 2>/dev/null; then
+  base64 -w0 "$OUT-thumb.jpg" > /tmp/thumb.b64
+  split -b 25000 -d -a 1 /tmp/thumb.b64 /tmp/thumb_part_
+  echo "THUMB $OUT-thumb.jpg $(stat -c%s "$OUT-thumb.jpg")B, base64 $(stat -c%s /tmp/thumb.b64) chars, parts: $(ls /tmp/thumb_part_* | tr '\n' ' ')"
+else
+  echo "WARN: thumbnail failed"
+fi
