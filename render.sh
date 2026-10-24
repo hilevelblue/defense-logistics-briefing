@@ -25,7 +25,7 @@ PY
 
 # 브라우저 찾기 (사전 설치된 Playwright Chromium 우선)
 CHROME=""
-for c in $(ls -d /opt/pw-browsers/chromium-*/chrome-linux/chrome /opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell 2>/dev/null | sort -V -r) \
+for c in $(ls -d /opt/pw-browsers/chromium-*/chrome-linux*/chrome /opt/pw-browsers/chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell /opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell 2>/dev/null | sort -V -r) \
          "$(command -v chromium || true)" "$(command -v google-chrome || true)"; do
   [ -n "$c" ] && [ -x "$c" ] && CHROME="$c" && break
 done
