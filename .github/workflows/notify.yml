@@ -41,7 +41,11 @@ jobs:
           ISSUE=$(python3 - "$DAY" <<'PY'
           import json, sys
           d = json.load(open("data.json", encoding="utf-8"))
-          print(f"{d.get('issue','')} · {d.get('date','')}\n\n**{d.get('subtitle','')}**")
+          y, m, dd = sys.argv[1].split("-")
+          if f"{y}. {int(m)}. {int(dd)}." in d.get("date", ""):
+              print(f"{d.get('issue','')} · {d.get('date','')}\n\n**{d.get('subtitle','')}**")
+          else:
+              print(f"{y}. {int(m)}. {int(dd)}.")
           PY
           )
           BODY=$(cat <<EOF
